@@ -30,7 +30,7 @@ if v.file_uploaded true
         v.preview="//cdn.nodehost.ca/imgcache/?url=v.data_array[data][directlink]&size=300"
       end
 
-      if if v.data_array[data][filetype]=="image/png"
+      if v.data_array[data][filetype]=="image/png"
         v.preview="//cdn.nodehost.ca/imgcache/?url=v.data_array[data][directlink]&size=300"
       end
 
