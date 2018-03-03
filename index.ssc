@@ -1,0 +1,29 @@
+s.include("/settings.ssc")
+
+if set uv.folder
+  s.template("/template_upload.html")
+
+  t.setting_filesize(v.max_size)
+  t.setting_maxfiles(v.max_files)
+
+  if uv.folder true
+    v.newfolder=s.random_string(30)
+    v.data=s.http_request_get("https://api.nodehost.ca/v.nodehost_apikey/storageplatform_create_folder/?folder=v.nodehost_folder&name=v.newfolder")
+    if not v.data false
+      v.data_array=s.json_decode(v.data)
+      t.upload_url("/upload?folder=v.data_array[data][folder_id]")
+      t.folder_link("<div class="filebox" id="showonupload" style="display:none;"><h3>Link to all files...</h3>The following is a link to view all files you have uploaded.<pre>https://filedrop.nodehost.ca/all_files?id=v.newfolder</pre></div>")
+    end
+  else
+    t.upload_url("/upload")
+    t.folder_link("<div id=\"showonupload\" style=\"display:none;\"></div>")
+  end
+else
+
+  s.template("/template.html")
+  t.name("Welcome to FileDrop")
+  t.tagline("Pick a option below to start uploading files, files are deleted after 3 days")
+
+  t.content("<a href='?folder=true'><div style=\"background: rgb(34, 130, 248);background: linear-gradient(135deg, rgba(3, 150, 255, 1) 0%, rgba(34, 130, 248, 1) 100%);padding: 15px;border-radius: 90px;color: #ffffff !important;margin: 0px auto;margin-top: 25px;margin-bottom:10px;max-width: 300px;display: block;text-transform: uppercase;\">Upload a group of files</div></a>")
+  t.content("<a href='?folder=false'><div style=\"background: rgb(34, 130, 248);background: linear-gradient(135deg, rgba(3, 150, 255, 1) 0%, rgba(34, 130, 248, 1) 100%);padding: 15px;border-radius: 90px;color: #ffffff !important;margin: 0px auto;margin-top: 25px;margin-bottom:10px;max-width: 300px;display: block;text-transform: uppercase;\">Upload seperate files</div></a>")
+end

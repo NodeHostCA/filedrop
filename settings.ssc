@@ -1,0 +1,16 @@
+s.system_maxtime(300)
+
+//max files at once on the uploader.
+v.max_files=50
+
+//in mb, 100 is the NodeHost storage platform max
+v.max_size=100
+
+//delete time for files in seconds so 3 days
+v.delete_time=259200
+
+//nodehost api key
+v.nodehost_apikey=""
+
+//nodehost default folder id
+v.nodehost_folder=71

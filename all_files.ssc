@@ -1,0 +1,37 @@
+s.include("/settings.ssc")
+s.template("/template.html")
+t.name("A folder has been shared with you")
+t.tagline("Click any of the files below to download them")
+
+if set uv.id
+  v.nodehost_folder_name=s.string_clean(uv.id)
+
+  v.data=s.http_request_get("https://api.nodehost.ca/v.nodehost_apikey/storageplatform_list_files/?foldername=v.nodehost_folder_name")
+
+  if not v.data false
+    v.data_array=s.json_decode(v.data)
+
+    s.array_loop("renderfiles",v.data_array[data])
+  else
+    t.content("<h2>This folder is empty</h2>")
+  end
+else
+  t.content("<h2>This folder cant be found</h2>")
+end
+
+
+
+
+f.renderfiles{
+  v.data=v.function_passed[0]
+  v.preview="//assets.nodehost.ca/icons/panel/file.png"
+  if v.data[filetype]=="image/jpeg"
+    v.preview="//cdn.nodehost.ca/imgcache/?url=v.data[directlink]&size=300"
+  end
+
+  if v.data[filetype]=="image/png"
+    v.preview="//cdn.nodehost.ca/imgcache/?url=v.data[directlink]&size=300"
+  end
+
+  t.content('<div style="width:33%;min-width:150px;display:inline-block;padding:5px;margin-bottom:5px;margin-top:5px;text-align:center;font-size:14px;vertical-align: bottom;"><a href="v.data[directlink]?action=download" target="_new"><img src="v.preview" style="max-width:184px;min-width:50px;min-height:50px;max-height:184px;margin-bottom:6px;border-radius:3px;"></a><div style="background:#f1f1f1;border-radius:3px;padding:5px;">v.data[filename]</div></div>')
+}

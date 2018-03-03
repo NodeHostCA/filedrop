@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{{pagename}}FileDrop</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="//assets.nodehost.ca/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="//assets.nodehost.ca/css/master.css">
+  <link rel="stylesheet" type="text/css" href="dropzone.css">
+	<link rel="shortcut icon" href="//assets.nodehost.ca/logo.png">
+	<script>
+		if(window.location.protocol != 'https:') {
+		 	location.href = location.href.replace("http://", "https://");
+		}
+	</script>
+	<style>
+		.brand{
+			position:fixed;
+			bottom:20px;
+			left:20px;
+			font-weight:600;
+			font-size:14px;
+			color: rgb(180,180,180);
+		}
+
+		.dropzone{
+			border:2px solid rgba(34, 130, 248, 1);
+			border-radius:5px;
+			background:#ffffff;
+			color:#555555;
+			margin-top:50px;
+			margin-bottom:30px;
+		}
+
+		.filebox{
+			text-align:left;
+			border-radius:5px;
+			background:#f1f1f1;
+			color:#555555;
+			padding:10px;
+			margin-top:10px;
+			margin-bottom:10px;
+		}
+
+		.filebox pre{
+			margin-top:10px;
+			border:1px solid rgba(34, 130, 248, 1);
+			border-radius:5px;
+			background:rgba(34, 130, 248, 1);
+			color:#ffffff;
+		}
+
+		.filebox *{
+			text-align:left;
+			color:#555555;
+		}
+
+		.filebox h3{
+			margin-top:0px;
+		}
+	</style>
+</head>
+<body>
+	<a href='https://www.nodehost.ca' target='_blank'><div class='brand'>Powered by NODEHOST</div></a>
+
+  <div style='margin:0px auto;marigin-top:40px;margin-bottom:40px;padding:10px;text-align:center;min-width:300px;max-width:800px;box-shadow: 0 0 52px -7px rgba(0, 0, 0, .3);
+-webkit-box-shadow: 0 0 52px -7px rgba(0, 0, 0, .3);
+-moz-box-shadow: 0 0 52px -7px rgba(0, 0, 0, .3);'>
+    <h1>Welcome to FileDrop</h1>
+		<h4>Drag and drop any files below to upload them</h4>
+
+    <form class="dropzone" id="my-awesome-dropzone"></form>
+
+		<div id="folder_uploaded">{{folder_link}}</div>
+		<div id="file_uploaded"></div>
+
+  </div>
+
+<script src="//assets.nodehost.ca/js/jquery.min.js"></script>
+<script src="//assets.nodehost.ca/js/bootstrap.min.js"></script>
+<script src="dropzone.js"></script>
+
+<script>
+
+Dropzone.autoDiscover = false;
+
+var myDropzone = new Dropzone("#my-awesome-dropzone", { url: "{{upload_url}}", maxFilesize: {{setting_filesize}}, timeout: 1200000, parallelUploads: 4, maxFiles: {{setting_maxfiles}}});
+
+myDropzone.on("complete", function(file) {
+  myDropzone.removeFile(file);
+});
+
+myDropzone.on("success", function(file,response) {
+	document.getElementById('showonupload').style.display = 'block';
+	var old=document.getElementById("file_uploaded").innerHTML;
+	document.getElementById("file_uploaded").innerHTML=response + old;
+});
+
+myDropzone.on("error", function(file,response) {
+
+});
+
+</script>
+
+</body>
+</html>

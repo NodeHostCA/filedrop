@@ -1,0 +1,51 @@
+s.include("/settings.ssc")
+v.file_uploaded=s.file_uploaded()
+
+if set uv.folder
+  v.nodehost_folder=s.string_clean(uv.folder)
+end
+
+//check if file has been uploaded before processing
+if v.file_uploaded true
+
+  //get file name and save to disk with a random name in a temp folder
+  v.filename=s.file_uploaded_name()
+  v.timestamp=s.timestamp()
+  v.random = s.random_string(10)
+  v.newname="v.timestamp v.random - v.filename"
+
+  //if file saved to disk we can upload to the NodeHost file storage platform
+  v.filesaved=s.file_uploaded_save("/tmp/v.newname")
+  if v.filesaved true
+
+    v.data=s.http_request_post_file("https://api.nodehost.ca/v.nodehost_apikey/storageplatform_create_file/?folder=v.nodehost_folder&filename=v.filename&delete=v.delete_time","/tmp/v.newname")
+
+    //if file uploaded fine we are good to go.
+    if not v.data false
+
+      v.data_array=s.json_decode(v.data)
+
+      v.preview="//assets.nodehost.ca/icons/panel/file.png"
+      if v.data_array[data][filetype]=="image/jpeg"
+        v.preview="//cdn.nodehost.ca/imgcache/?url=v.data_array[data][directlink]&size=300"
+      end
+
+      if if v.data_array[data][filetype]=="image/png"
+        v.preview="//cdn.nodehost.ca/imgcache/?url=v.data_array[data][directlink]&size=300"
+      end
+
+      s.echo("<div class='filebox'><h3>File v.filename uploaded</h3><img src="v.preview" style="float:left;max-width:104px;min-width:50px;min-height:50px;max-height:104px;margin-bottom:6px;border-radius:3px;margin-right:10px;"><div>Here is the link to download the file.<pre>v.data_array[data][directlink]?action=download</pre></div></div>")
+
+    else
+      s.echo("file upload to our servers failed... Try again in a few minutes...")
+    end
+
+    //Delete the temp file now that we are done with it
+    v.delete=s.file_delete("/tmp/v.newname")
+
+  else
+    s.echo("We where unable to save the file to disk... Try again in a few minutes...")
+  end
+else
+  s.echo("error, file was not uploaded...")
+end
