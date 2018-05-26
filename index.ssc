@@ -8,7 +8,7 @@ if set uv.folder
 
   if uv.folder true
     v.newfolder=s.random_string(30)
-    v.data=s.http_request_get("https://api.nodehost.ca/v.nodehost_apikey/storageplatform_create_folder/?folder=v.nodehost_folder&name=v.newfolder")
+    v.data=s.http_request_get("https://api.nodehost.cloud/post_services_storage_create_folder?api_key=v.nodehost_apikey&folder=v.nodehost_folder&name=v.newfolder")
     if not v.data false
       v.data_array=s.json_decode(v.data)
       t.upload_url("/upload?folder=v.data_array[data][folder_id]")

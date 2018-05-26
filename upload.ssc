@@ -18,7 +18,7 @@ if v.file_uploaded true
   v.filesaved=s.file_uploaded_save("/tmp/v.newname")
   if v.filesaved true
 
-    v.data=s.http_request_post_file("https://api.nodehost.ca/v.nodehost_apikey/storageplatform_create_file/?folder=v.nodehost_folder&filename=v.filename&delete=v.delete_time","/tmp/v.newname")
+    v.data=s.http_request_post_file("https://api.nodehost.cloud/post_services_storage_create_file?api_key=v.nodehost_apikey&folder=v.nodehost_folder&filename=v.filename&delete=v.delete_time","/tmp/v.newname")
 
     //if file uploaded fine we are good to go.
     if not v.data false

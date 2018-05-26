@@ -6,7 +6,7 @@ t.tagline("Click any of the files below to download them")
 if set uv.id
   v.nodehost_folder_name=s.string_clean(uv.id)
 
-  v.data=s.http_request_get("https://api.nodehost.ca/v.nodehost_apikey/storageplatform_list_files/?foldername=v.nodehost_folder_name")
+  v.data=s.http_request_get("https://api.nodehost.cloud/get_services_storage_files?api_key=v.nodehost_apikey&foldername=v.nodehost_folder_name")
 
   if not v.data false
     v.data_array=s.json_decode(v.data)
